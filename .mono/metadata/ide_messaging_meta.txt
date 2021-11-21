@@ -1,0 +1,2 @@
+﻿35231
+/home/voxibit/godot/godot_mono/Godot_v3.4-stable_mono_x11.64

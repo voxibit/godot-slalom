@@ -1,0 +1,15 @@
+[remap]
+
+importer="ogg_vorbis"
+type="AudioStreamOGGVorbis"
+path="res://.import/Zodik - TimeQ.ogg-11680b3fc5f5b8286b3926aab3428f85.oggstr"
+
+[deps]
+
+source_file="res://music/Zodik - TimeQ.ogg"
+dest_files=[ "res://.import/Zodik - TimeQ.ogg-11680b3fc5f5b8286b3926aab3428f85.oggstr" ]
+
+[params]
+
+loop=true
+loop_offset=0
