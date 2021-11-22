@@ -10,6 +10,11 @@ onready var player_particles :CPUParticles = $Player/CPUParticles
 onready var hud_score :Label = $hud/MarginContainer/HBoxContainer/ScoreContainer/ScoreLabel
 onready var sky :ProceduralSky = $Player/Camera.get_environment().get_sky()
 
+const MAX_TILT:float = PI/6
+const TILT_DECAY:float = 0.95
+# This acceleration assumes decay is applied twice (^2) as (T+a)*d^2=T when T==1
+const TILT_ACCELERATION:float = (1.0-pow(TILT_DECAY,2))/pow(TILT_DECAY,2)
+
 var sky_tween :Resource = preload("sky_tween.gd").new()
 
 var tilt:float=0
@@ -25,15 +30,17 @@ func _ready():
 	reset()
 
 func _physics_process(delta):
-	var decay :float = 0.95
+	var decay :float = TILT_DECAY
 	
 	if not game_over:
 		if Input.is_action_pressed("ui_left"):
-			tilt += 0.06
+			tilt += TILT_ACCELERATION
 			decay *= decay
 		elif Input.is_action_pressed("ui_right"):
-			tilt -= 0.06
+			tilt -= TILT_ACCELERATION
 			decay *= decay
+		elif Input.is_action_just_pressed("ui_cancel"):
+			obstacles.skip()
 			
 		score += 100*delta
 		hud_score.set_text(str(int(score)))
@@ -42,10 +49,11 @@ func _physics_process(delta):
 		reset()
 		
 	tilt *= decay
-	player.set_rotation(Vector3(0,0,tilt/1.5))
+	player.set_rotation(Vector3(0,0,tilt*MAX_TILT))
 	obstacles.set_tilt(tilt)
 	
 func on_game_over(obstacle:Area):
+	return
 	game_over = true
 	obstacles.game_over = true
 	player_particles.set_emitting(true)

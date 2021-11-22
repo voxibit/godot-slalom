@@ -8,11 +8,12 @@ const SKY_HORIZON_COLOR :Color = Color(0.8, 0.6, 0.9, 1.0)
 const GROUND_HORIZON_COLOR :Color = Color(0.8, 0.6, 0.5, 1.0)
 const GROUND_BOTTOM_COLOR :Color = Color(0.5, 0.3, 0.1, 1.0)
 
-const CONES_PER_SECOND :float = 15.0
-const LEVEL_DURATION :float = 5.0
+const CONE_DENSITY :float = 1.0
+const LEVEL_DURATION :float = 15.0
 const LEVEL_FADE_OUT_TIME :float = 4.0
 
 var t :float = 0
+var abs_t :float = 0
 var is_loaded :bool = false
 
 func initialize(obstacles:Spatial):
@@ -23,7 +24,7 @@ func renormalize_positions(translation:Vector3):
 
 func process(delta:float, obs_x:float, obs_z:float, max_spawn_x:float, max_spawn_z:float):
 	t += delta
-	if t > 1.0/CONES_PER_SECOND:
+	if t > 1.0/(CONE_DENSITY*max_spawn_x):
 		t = 0
 		return _spawn_cone(obs_x, obs_z, max_spawn_x, max_spawn_z)
 
@@ -43,3 +44,6 @@ func _spawn_cone(obs_x:float, obs_z:float, max_spawn_x:float, max_spawn_z:float)
 	cone.set_scale(Vector3(xscale,yscale,1))
 	
 	return cone
+
+func setup():
+	pass

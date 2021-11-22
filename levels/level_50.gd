@@ -1,0 +1,18 @@
+extends "templates/basic.gd"
+
+func setup():
+	SKY_TOP_COLOR = Color("#f0d983")
+	SKY_HORIZON_COLOR = Color("#f36d7d")
+	GROUND_HORIZON_COLOR = Color("#c56ea8")
+	GROUND_BOTTOM_COLOR = Color("#8e6ae5")
+
+	CONE_DENSITY = 0.9
+	LEVEL_DURATION = 15.0
+	LEVEL_FADE_OUT_TIME = 4.0
+
+	CONE_SCALE_X0 = 1.0
+	CONE_SCALE_X_RANDOM = 1.0
+	
+	CONE_MOTION_PROB = 0.9
+	CONE_VELOCITY_0 = 0.0
+	CONE_VELOCITY_RANDOM = 3.0

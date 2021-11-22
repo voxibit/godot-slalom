@@ -2,10 +2,12 @@ extends Spatial
 
 signal next_level(old_level, new_level, fade_time)
 
-const _SPEED :float = 4.0
-const _SPAWN_DISTANCE :float = 10.0
+const SPEED :float = 12.0
+const _SPAWN_DISTANCE_Z :float = 20.0
+const _SPAWN_DISTANCE_X :float = 20.0
+const MAX_HORIZONTAL_DIR :float = 1.0
 
-var direction :Vector3 = Vector3(0,0,2)
+var direction :Vector3 = Vector3(0,0,1)
 
 var game_over :bool = false setget set_game_over, get_game_over
 var relative_speed :float = 1
@@ -19,15 +21,16 @@ var _start_next_level_advance :bool = false
 
 func _ready():
 	levels = []
-	for lvl in [1,2,3,4]:
-	#for lvl in [4]:
+	for lvl in [10,20,30,40,50]:
+	#for lvl in [30]:
 		var loaded_level = load("levels/level_%d.gd"%lvl).new()
+		loaded_level.setup()
 		levels.append(loaded_level)
 	translate(Vector3(10,0,0))
 
 func _process(delta):
 	if game_over: relative_speed *= pow(0.2,delta)
-	translate(direction*_SPEED*delta*relative_speed)
+	translate(direction*SPEED*delta*relative_speed)
 	
 	var z :float = get_translation().z
 	if z > 10:
@@ -38,7 +41,7 @@ func _process(delta):
 	
 	if not game_over:
 		t += delta
-		var spawn = curr_level.process(delta, get_translation().x, get_translation().z, 1.5*_SPAWN_DISTANCE, _SPAWN_DISTANCE)
+		var spawn = curr_level.process(delta, get_translation().x, get_translation().z, 1.5*_SPAWN_DISTANCE_X, _SPAWN_DISTANCE_Z)
 		if spawn != null:
 			add_child(spawn)
 
@@ -53,6 +56,7 @@ func _get_level():
 		level_index += 1
 		level = levels[level_index]
 		_start_next_level_advance = false
+		
 	# Fade out of current level
 	elif t > curr_level.LEVEL_DURATION - curr_level.LEVEL_FADE_OUT_TIME and level_index < len(levels)-1:
 		if not _start_next_level_advance:
@@ -79,7 +83,7 @@ func _renormalize_positions(z:float):
 		child.translate(Vector3(x/child.get_scale().x,0,z))
 
 func set_tilt(tilt:float):
-	direction.x = tilt*3.0
+	direction.x = tilt*MAX_HORIZONTAL_DIR
 
 func set_game_over(go):
 	game_over = go
@@ -102,4 +106,8 @@ func reset():
 	for level in levels:
 		level.is_loaded = false
 	curr_level = levels[0]
+	
+func skip():
+	t = curr_level.LEVEL_DURATION - curr_level.LEVEL_FADE_OUT_TIME
+	curr_level.abs_t = t
 
