@@ -8,9 +8,12 @@ onready var player_collision :Area = $Player/Area
 onready var points_collision :Area = $Player/PointsArea
 onready var player_particles :CPUParticles = $Player/CPUParticles
 onready var hud_score :Label = $hud/ScoreView/HBoxContainer/ScoreContainer/ScoreLabel
+onready var high_score_label :Label = $hud/ScoreView/HBoxContainer/HiScoreContainer/HiScoreLabel
 onready var score_view :Container = $hud/ScoreView
 onready var final_score_view :Container = $hud/FinalScoreView
 onready var final_score_label :Label = $hud/FinalScoreView/VBoxContainer/HBoxContainer/FinalScore
+onready var high_score_label_final :Label = $hud/FinalScoreView/VBoxContainer/HBoxContainer2/HighScore
+onready var start_game_hud :Container = $hud/StartGameView
 onready var sky :ProceduralSky = $Player/Camera.get_environment().get_sky()
 
 const MAX_TILT:float = PI/6
@@ -22,15 +25,18 @@ var sky_tween :Resource = preload("sky_tween.gd").new()
 
 var tilt:float=0
 var score :float = 0
+var high_score :float = 0
 
-var game_over :bool = false
+var game_over :bool = true
 
 func _ready():
 	sky_tween.set_sky(sky)
 	obstacles.connect("next_level", self, "advance_level")
 	player_collision.connect("area_entered", self, "on_game_over")
 	points_collision.connect("area_entered", self, "on_points_collect")
-	reset()
+	obstacles.relative_speed=0
+	#reset()
+	
 
 func _physics_process(delta):
 	var decay :float = TILT_DECAY
@@ -47,6 +53,9 @@ func _physics_process(delta):
 			
 		score += 100*delta
 		hud_score.set_text(str(int(score)))
+		if score > high_score:
+			high_score = score
+			high_score_label.set_text(str(int(high_score)))
 		sky_tween.process(delta)
 	elif Input.is_action_pressed("ui_select"):
 		reset()
@@ -62,7 +71,11 @@ func on_game_over(obstacle:Area):
 	sky_tween.stop()
 	score_view.set_visible(false)
 	final_score_view.set_visible(true)
+	if score > high_score:
+		high_score = score
 	final_score_label.set_text(str(int(score)))
+	high_score_label_final.set_text(str(int(high_score)))
+	high_score_label.set_text(str(int(high_score)))
 	
 func on_points_collect(obstacle_area:Area):
 	if game_over: return
@@ -78,6 +91,7 @@ func reset():
 	player_particles.set_emitting(false)
 	score_view.set_visible(true)
 	final_score_view.set_visible(false)
+	start_game_hud.set_visible(false)
 
 	sky.set_sky_top_color(obstacles.levels[0].SKY_TOP_COLOR)
 	sky.set_sky_horizon_color(obstacles.levels[0].SKY_HORIZON_COLOR)
