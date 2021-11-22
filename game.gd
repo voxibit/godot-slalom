@@ -7,7 +7,10 @@ onready var player :MeshInstance = $Player
 onready var player_collision :Area = $Player/Area
 onready var points_collision :Area = $Player/PointsArea
 onready var player_particles :CPUParticles = $Player/CPUParticles
-onready var hud_score :Label = $hud/MarginContainer/HBoxContainer/ScoreContainer/ScoreLabel
+onready var hud_score :Label = $hud/ScoreView/HBoxContainer/ScoreContainer/ScoreLabel
+onready var score_view :Container = $hud/ScoreView
+onready var final_score_view :Container = $hud/FinalScoreView
+onready var final_score_label :Label = $hud/FinalScoreView/VBoxContainer/HBoxContainer/FinalScore
 onready var sky :ProceduralSky = $Player/Camera.get_environment().get_sky()
 
 const MAX_TILT:float = PI/6
@@ -53,11 +56,13 @@ func _physics_process(delta):
 	obstacles.set_tilt(tilt)
 	
 func on_game_over(obstacle:Area):
-	return
 	game_over = true
 	obstacles.game_over = true
 	player_particles.set_emitting(true)
 	sky_tween.stop()
+	score_view.set_visible(false)
+	final_score_view.set_visible(true)
+	final_score_label.set_text(str(int(score)))
 	
 func on_points_collect(obstacle_area:Area):
 	if game_over: return
@@ -71,6 +76,8 @@ func reset():
 	game_over = false
 	obstacles.reset()
 	player_particles.set_emitting(false)
+	score_view.set_visible(true)
+	final_score_view.set_visible(false)
 
 	sky.set_sky_top_color(obstacles.levels[0].SKY_TOP_COLOR)
 	sky.set_sky_horizon_color(obstacles.levels[0].SKY_HORIZON_COLOR)

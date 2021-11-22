@@ -1,37 +1,11 @@
-extends Resource
+extends "templates/basic.gd"
 
-const CONE_SCENE :PackedScene = preload("../enemies/cone.tscn")
+func setup():
+	SKY_TOP_COLOR = Color(0.64, 0.83, 0.94, 1.0)
+	SKY_HORIZON_COLOR = Color(0.83, 0.91, 0.98, 1.0)
+	GROUND_HORIZON_COLOR = Color(0.89, 0.98, 0.83, 1.0)
+	GROUND_BOTTOM_COLOR = Color(0.24, 0.43, 0.15, 1.0)
 
-const SKY_TOP_COLOR :Color = Color(0.64, 0.83, 0.94, 1.0)
-const SKY_HORIZON_COLOR :Color = Color(0.83, 0.91, 0.98, 1.0)
-const GROUND_HORIZON_COLOR :Color = Color(0.89, 0.98, 0.83, 1.0)
-const GROUND_BOTTOM_COLOR :Color = Color(0.24, 0.43, 0.15, 1.0)
-
-const CONE_DENSITY :float = 0.6
-const LEVEL_DURATION :float = 15.0
-const LEVEL_FADE_OUT_TIME :float = 4.0
-
-var t :float = 0
-var abs_t :float = 0
-var is_loaded :bool = false
-
-func initialize(obstacles:Spatial):
-	t = 0
-	
-func renormalize_positions(translation:Vector3):
-	pass
-
-func process(delta:float, obs_x:float, obs_z:float, max_spawn_x:float, max_spawn_z:float):
-	t += delta
-	if t > 1.0/(CONE_DENSITY*max_spawn_x):
-		t = 0
-		return _spawn_cone(obs_x, obs_z, max_spawn_x, max_spawn_z)
-
-func _spawn_cone(obs_x:float, obs_z:float, max_spawn_x:float, max_spawn_z:float) -> MeshInstance:
-	var cone = CONE_SCENE.instance()
-	var x :float = (2*randf()-1)*max_spawn_x
-	var z :float = max_spawn_z * (1.0 + (randf()-0.5)/12.0)
-	cone.translate(Vector3(obs_x + x, 0, -obs_z-z))
-	cone.rando()
-	
-	return cone
+	CONE_DENSITY = 0.6
+	LEVEL_DURATION = 15.0
+	LEVEL_FADE_OUT_TIME = 4.0

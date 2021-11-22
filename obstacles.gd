@@ -21,8 +21,8 @@ var _start_next_level_advance :bool = false
 
 func _ready():
 	levels = []
-	for lvl in [10,20,30,40,50]:
-	#for lvl in [30]:
+	for lvl in [1,2,3,4,5]:
+
 		var loaded_level = load("levels/level_%d.gd"%lvl).new()
 		loaded_level.setup()
 		levels.append(loaded_level)
