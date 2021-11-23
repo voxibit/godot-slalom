@@ -1,5 +1,12 @@
 extends Resource
 
+# This script transitions the environment sky from level to level
+# From the docs, recalculating the sky should happen infrequently,
+# as it is expensive. A regular tween caused unacceptable performance.
+# This script tweens at 5 fps (0.2 frames per second) at most.
+# If a transition lasts more than 2 seconds, only 10 frames are
+# calculated, at a lower fps than 5.
+
 const _MAX_FRAMES = 10
 const _SECONDS_PER_FRAME :float = 0.2
 var _spf :float
@@ -34,6 +41,7 @@ func tween(old_sky_top:Color, old_sky_horizon:Color, old_ground_bottom:Color, ol
 
 func process(delta:float):
 	if not processing: return
+	#prints("TWEEN", abs_t, t)
 	abs_t += delta
 	if abs_t > duration:
 		_color_sky()
@@ -54,9 +62,11 @@ func _color_sky():
 	sky.set_ground_horizon_color(lerp(ground_horizon[0], ground_horizon[1], abs_t/duration))
 
 func start():
+	print("START tween")
 	processing = true
 	
 func stop():
+	print("      ============ STOP tween")
 	processing = false
 	reset()
 

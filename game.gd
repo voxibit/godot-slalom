@@ -99,6 +99,7 @@ func reset():
 	sky.set_ground_bottom_color(obstacles.levels[0].GROUND_BOTTOM_COLOR)
 
 func advance_level(old, new, fade:float):
+	print("___ADVANCE LEVEL___")
 	sky_tween.tween(old.SKY_TOP_COLOR, old.SKY_HORIZON_COLOR, 
 					old.GROUND_BOTTOM_COLOR, old.GROUND_HORIZON_COLOR,
 					new.SKY_TOP_COLOR, new.SKY_HORIZON_COLOR, 

@@ -99,6 +99,7 @@ func reset():
 	game_over = false
 	t = 0
 	level_index = 0
+	_start_next_level_advance = false
 	relative_speed = 1
 	for child in get_children():
 		remove_child(child)
