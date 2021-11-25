@@ -9,6 +9,7 @@ var GROUND_BOTTOM_COLOR :Color = Color(0.0, 0.0, 0.2, 1.0)
 
 var CONES_PER_SECOND :float = 20.0
 var LEVEL_DURATION :float = 30.0
+var LEVEL_POINTS :float = 3000.0
 var LEVEL_FADE_OUT_TIME :float = 4.0
 
 var FUNNEL_IN_TIME :float = 3.0
@@ -29,6 +30,8 @@ var abs_t :float = 0 # for path width funneling and exiting the level
 var _prev_path_x :float
 var _next_path_x :float
 var _path_duration :float
+
+var _fading_out :bool = false
 
 var left :bool # cone spawns on left of path, VS right
 var turn_left :bool # path takes a turn to the left, VS right
@@ -88,12 +91,8 @@ func _spawn_cone(obs_x:float, obs_z:float, max_spawn_x:float, max_spawn_z:float)
 		_next_step()
 	
 	# get the path width (allows funneling in / out)
-	var width :float
-	if abs_t < FUNNEL_IN_TIME:
-		width = lerp(FUNNEL_WIDTH, TUNNEL_WIDTH, abs_t/FUNNEL_IN_TIME)
-	elif abs_t > LEVEL_DURATION - FUNNEL_OUT_TIME:
-		width = lerp(TUNNEL_WIDTH, FUNNEL_WIDTH, (abs_t-LEVEL_DURATION+FUNNEL_OUT_TIME)/FUNNEL_OUT_TIME)
-	else: width = TUNNEL_WIDTH
+	var width :float = get_width()
+	
 
 	# Create a cone at max_spawn_z distance, and get central position of path
 	var cone = CONE_SCENE.instance()
@@ -120,3 +119,19 @@ func _get_path_x() -> float:
 
 func setup():
 	pass
+	
+func get_width() -> float:
+	if _fading_out:
+		return lerp(TUNNEL_WIDTH, FUNNEL_WIDTH, abs_t/FUNNEL_OUT_TIME)
+	elif abs_t < FUNNEL_IN_TIME:
+		return lerp(FUNNEL_WIDTH, TUNNEL_WIDTH, abs_t/FUNNEL_IN_TIME)
+	return TUNNEL_WIDTH
+
+func fade_in():
+	_fading_out = false
+	abs_t = 0
+	
+	
+func fade_out():
+	_fading_out = true
+	abs_t = 0

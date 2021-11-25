@@ -20,6 +20,7 @@ const MAX_TILT:float = PI/5
 const TILT_DECAY:float = 0.95
 # This acceleration assumes decay is applied twice (^2) as (T+a)*d^2=T when T==1
 const TILT_ACCELERATION:float = (1.0-pow(TILT_DECAY,2))/pow(TILT_DECAY,2)
+const POINTS_PER_SECOND:float = 100.0
 
 var sky_tween :Resource = preload("sky_tween.gd").new()
 
@@ -35,6 +36,7 @@ func _ready():
 	player_collision.connect("area_entered", self, "on_game_over")
 	points_collision.connect("area_entered", self, "on_points_collect")
 	obstacles.relative_speed=0
+	obstacles.set_game(self)
 	#reset()
 	
 
@@ -51,7 +53,7 @@ func _physics_process(delta):
 		elif Input.is_action_just_pressed("ui_cancel"):
 			obstacles.skip()
 			
-		score += 100*delta
+		score += POINTS_PER_SECOND*delta
 		hud_score.set_text(str(int(score)))
 		if score > high_score:
 			high_score = score

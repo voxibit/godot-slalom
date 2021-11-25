@@ -10,6 +10,8 @@ const MAX_HORIZONTAL_DIR :float = 1.0
 var direction :Vector3 = Vector3(0,0,1)
 
 var game_over :bool = false setget set_game_over, get_game_over
+var game :Spatial
+var score0 :float = 0.0
 var relative_speed :float = 1
 
 var levels :Array
@@ -26,9 +28,9 @@ func _ready():
 		var loaded_level = load("levels/level_%d.gd"%lvl).new()
 		loaded_level.setup()
 		levels.append(loaded_level)
-	translate(Vector3(10,0,0))
+	translate(Vector3(10,0,0)) #???
 
-func _process(delta):
+func _physics_process(delta):
 	if game_over: relative_speed *= pow(0.2,delta)
 	translate(direction*SPEED*delta*relative_speed)
 	
@@ -40,35 +42,46 @@ func _process(delta):
 	curr_level = _get_level()
 	
 	if not game_over:
-		t += delta
+		if _start_next_level_advance: t += delta
 		var spawn = curr_level.process(delta, get_translation().x, get_translation().z, 1.5*_SPAWN_DISTANCE_X, _SPAWN_DISTANCE_Z)
 		if spawn != null:
 			add_child(spawn)
 
+func set_game(game:Spatial):
+	self.game = game
 
 func _get_level():
 	var curr_level = levels[level_index]
 	var level = curr_level
 	
-	# Switch to new level completely
-	if t > levels[level_index].LEVEL_DURATION and level_index < len(levels)-1:
-		t = 0
-		level_index += 1
-		level = levels[level_index]
-		_start_next_level_advance = false
-		
-	# Fade out of current level
-	elif t > curr_level.LEVEL_DURATION - curr_level.LEVEL_FADE_OUT_TIME and level_index < len(levels)-1:
+	# Start transition to new level
+	if (game.score-score0) > curr_level.LEVEL_POINTS		and \
+						 t < curr_level.LEVEL_FADE_OUT_TIME	and \
+			   level_index < len(levels)-1:
 		if not _start_next_level_advance:
 			_start_next_level_advance = true
 			emit_signal("next_level", levels[level_index], levels[level_index+1], levels[level_index].LEVEL_FADE_OUT_TIME)
-			
-		var fade_t = t - (curr_level.LEVEL_DURATION - curr_level.LEVEL_FADE_OUT_TIME)
+			levels[level_index].fade_out()
+			levels[level_index+1].fade_in()
+			t = 0
+		# Randomly pick prev or next level to spawn enemies from
+		var fade_t = t - curr_level.LEVEL_FADE_OUT_TIME
 		var _rand = randf()
 		if _rand < fade_t/curr_level.LEVEL_FADE_OUT_TIME:
 			level = levels[level_index + 1]
 		else:
 			level = curr_level
+	
+	# Complete transition and completely switch to new level
+	elif (game.score-score0) > curr_level.LEVEL_POINTS			and \
+						 t >= curr_level.LEVEL_FADE_OUT_TIME	and \
+			   level_index < len(levels)-1:
+		_start_next_level_advance = false
+		t = 0
+		level_index += 1
+		level = levels[level_index]
+		score0 = game.score
+
 	if !level.is_loaded:
 		level.is_loaded = true
 		level.initialize(self)
@@ -98,6 +111,7 @@ func get_game_over():
 func reset():
 	game_over = false
 	t = 0
+	score0 = 0
 	level_index = 0
 	_start_next_level_advance = false
 	relative_speed = 1

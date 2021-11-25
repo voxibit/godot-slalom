@@ -9,6 +9,7 @@ var GROUND_BOTTOM_COLOR :Color = Color("#8e6ae5")
 
 var CONE_DENSITY :float = 1.1
 var LEVEL_DURATION :float = 5.0
+var LEVEL_POINTS :float = 500.0
 var LEVEL_FADE_OUT_TIME :float = 4.0
 
 var CONE_MOTION_PROB :float = 0
@@ -54,3 +55,9 @@ func _spawn_cone(obs_x:float, obs_z:float, max_spawn_x:float, max_spawn_z:float)
 					CONE_SCALE_Y0, CONE_SCALE_Y_RANDOM)
 	
 	return cone
+
+func fade_in():
+	pass
+	
+func fade_out():
+	pass
