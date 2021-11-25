@@ -47,5 +47,5 @@ func _physics_process(delta):
 	translate(Vector3(xspeed/get_scale().x*delta, 0, 0))
 
 func get_soundfx():
-	return $AudioStreamPlayer3D
-	#return sounds[randi() % len(sounds)]
+	#return $AudioStreamPlayer3D
+	return sounds[randi() % len(sounds)]

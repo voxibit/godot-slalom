@@ -26,6 +26,8 @@ background_mode = 2
 background_sky = SubResource( 2 )
 fog_depth_begin = 5.0
 fog_depth_end = 10.0
+glow_enabled = true
+glow_intensity = 5.18
 
 [sub_resource type="QuadMesh" id=11]
 size = Vector2( 2, 2 )
