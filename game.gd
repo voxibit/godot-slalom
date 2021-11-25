@@ -16,7 +16,7 @@ onready var high_score_label_final :Label = $hud/FinalScoreView/VBoxContainer/HB
 onready var start_game_hud :Container = $hud/StartGameView
 onready var sky :ProceduralSky = $Player/Camera.get_environment().get_sky()
 
-const MAX_TILT:float = PI/6
+const MAX_TILT:float = PI/5
 const TILT_DECAY:float = 0.95
 # This acceleration assumes decay is applied twice (^2) as (T+a)*d^2=T when T==1
 const TILT_ACCELERATION:float = (1.0-pow(TILT_DECAY,2))/pow(TILT_DECAY,2)
@@ -83,6 +83,8 @@ func on_points_collect(obstacle_area:Area):
 	if obstacle.points_enabled:
 		score += 500
 		obstacle.points_enabled = false
+		obstacle.soundfx.play(0)
+
 	
 func reset():
 	score = 0

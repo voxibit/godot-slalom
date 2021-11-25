@@ -1,4 +1,4 @@
-[gd_scene load_steps=18 format=2]
+[gd_scene load_steps=20 format=2]
 
 [ext_resource path="res://game.gd" type="Script" id=1]
 [ext_resource path="res://obstacles.gd" type="Script" id=2]
@@ -7,6 +7,7 @@
 [ext_resource path="res://particles/Smoke30Frames_0.png" type="Texture" id=5]
 [ext_resource path="res://music/Zodik - TimeQ.ogg" type="AudioStream" id=6]
 [ext_resource path="res://Player.gd" type="Script" id=7]
+[ext_resource path="res://shaders/glitch/glitch_arlez80.tres" type="Material" id=8]
 
 [sub_resource type="QuadMesh" id=3]
 size = Vector2( 1.28, 0.32 )
@@ -25,6 +26,9 @@ background_mode = 2
 background_sky = SubResource( 2 )
 fog_depth_begin = 5.0
 fog_depth_end = 10.0
+
+[sub_resource type="QuadMesh" id=11]
+size = Vector2( 2, 2 )
 
 [sub_resource type="BoxShape" id=5]
 extents = Vector3( 0.44, 0.08, 0.1 )
@@ -69,6 +73,12 @@ script = ExtResource( 7 )
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.75, 1.192 )
 environment = SubResource( 1 )
 far = 20.0
+
+[node name="MeshInstance" type="MeshInstance" parent="Player/Camera"]
+visible = false
+extra_cull_margin = 16384.0
+mesh = SubResource( 11 )
+material/0 = ExtResource( 8 )
 
 [node name="Area" type="Area" parent="Player"]
 collision_mask = 2
@@ -119,4 +129,5 @@ anim_offset_random = 1.0
 
 [node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="."]
 stream = ExtResource( 6 )
+volume_db = -23.597
 autoplay = true

@@ -110,7 +110,7 @@ func _spawn_cone(obs_x:float, obs_z:float, max_spawn_x:float, max_spawn_z:float)
 		left = true
 	
 	cone.translate(Vector3(x0 + x, 0, -obs_z-z))
-	cone.rando()
+	cone.rand_color()
 	#cone.set_scale(Vector3(2,1,1))
 	
 	return cone
