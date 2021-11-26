@@ -29,7 +29,7 @@ float random( float seed )
 void vertex() {
   POSITION = vec4(VERTEX, 1.0);
 }
-/*
+
 void fragment( )
 {
 	float enable_shift = float(
@@ -59,19 +59,20 @@ void fragment( )
 	ALBEDO = pixel_color.rgb;
 	ALPHA = pixel_color.a;
 }
-*/
+
+/*
 void fragment() {
 	vec2 fixed_uv = SCREEN_UV;
 	vec4 pixel_color = texture( SCREEN_TEXTURE, fixed_uv );
 	ALBEDO = pixel_color.rgb;
 	ALPHA = pixel_color.a;
 }
-"
+*/"
 
 [resource]
 shader = SubResource( 1 )
-shader_param/shake_power = 0.03
-shader_param/shake_rate = 0.2
+shader_param/shake_power = 0.01
+shader_param/shake_rate = 1.0
 shader_param/shake_speed = 5.0
 shader_param/shake_block_size = 30.5
 shader_param/shake_color_rate = 0.01

@@ -16,6 +16,10 @@ var CONE_MOTION_PROB :float = 0
 var CONE_VELOCITY_0 :float = 0
 var CONE_VELOCITY_RANDOM :float = 0
 
+var CONE_VZ_PROB :float = 0
+var CONE_VZ_0 :float = 0
+var CONE_VZ_RANDOM :float = 0
+
 var CONE_SCALE_X0 :float = 1
 var CONE_SCALE_X_RANDOM :float = 0
 
@@ -41,8 +45,6 @@ func process(delta:float, obs_x:float, obs_z:float, max_spawn_x:float, max_spawn
 
 func _spawn_cone(obs_x:float, obs_z:float, max_spawn_x:float, max_spawn_z:float) -> MeshInstance:
 	var cone = CONE_SCENE.instance()
-	var xmove :bool = false
-	if randf() < CONE_MOTION_PROB: xmove = true
 	
 	# position the cone
 	var x :float = (2*randf()-1)*max_spawn_x
@@ -50,7 +52,10 @@ func _spawn_cone(obs_x:float, obs_z:float, max_spawn_x:float, max_spawn_z:float)
 	cone.translate(Vector3(obs_x + x, 0, -obs_z-z)) # random position left/right
 	
 	cone.rand_color()
-	cone.rand_xspeed(CONE_VELOCITY_0, CONE_VELOCITY_RANDOM)
+	if randf() < CONE_MOTION_PROB:
+		cone.rand_xspeed(CONE_VELOCITY_0, CONE_VELOCITY_RANDOM)
+	if randf() < CONE_VZ_PROB:
+		cone.rand_zspeed(CONE_VZ_0, CONE_VZ_RANDOM)
 	cone.rand_scale(CONE_SCALE_X0, CONE_SCALE_X_RANDOM,
 					CONE_SCALE_Y0, CONE_SCALE_Y_RANDOM)
 	

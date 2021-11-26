@@ -15,7 +15,7 @@ var LEVEL_FADE_OUT_TIME :float = 4.0
 var FUNNEL_IN_TIME :float = 3.0
 var FUNNEL_OUT_TIME :float = 3.0
 
-var FUNNEL_WIDTH :float = 20.0
+var FUNNEL_WIDTH :float = 50.0
 var TUNNEL_WIDTH :float = 4.2
 
 var TURN_SIZE_0 :float = 5
@@ -70,7 +70,7 @@ func _next_step():
 	_path_duration = TURN_DURATION_0 + randf()*TURN_DURATION_RAND
 	
 	# don't turn if we are within funnel_out_time
-	if abs_t < LEVEL_DURATION-FUNNEL_OUT_TIME:
+	if not _fading_out:
 		var z_distance = _path_duration*_obstacle_speed
 		# turn_size is within [0...1], where 1 equals z_dist*slope
 		var turn_size = TURN_SIZE_0 + TURN_SIZE_RAND*randf()
@@ -122,7 +122,7 @@ func setup():
 	
 func get_width() -> float:
 	if _fading_out:
-		return lerp(TUNNEL_WIDTH, FUNNEL_WIDTH, abs_t/FUNNEL_OUT_TIME)
+		return lerp(TUNNEL_WIDTH, FUNNEL_WIDTH/2.0, abs_t/FUNNEL_OUT_TIME)
 	elif abs_t < FUNNEL_IN_TIME:
 		return lerp(FUNNEL_WIDTH, TUNNEL_WIDTH, abs_t/FUNNEL_IN_TIME)
 	return TUNNEL_WIDTH

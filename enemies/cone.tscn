@@ -11,11 +11,6 @@ size = Vector3( 1, 2, 0.2 )
 
 [sub_resource type="SpatialMaterial" id=5]
 resource_local_to_scene = true
-emission_enabled = true
-emission = Color( 0, 0, 0, 1 )
-emission_energy = 1.0
-emission_operator = 0
-emission_on_uv2 = false
 
 [sub_resource type="ConcavePolygonShape" id=4]
 data = PoolVector3Array( 0, 1, 0.1, 0.5, -1, 0.1, -0.5, -1, 0.1, 0, 1, -0.1, -0.5, -1, -0.1, 0.5, -1, -0.1, 0, 1, 0.1, 0, 1, -0.1, 0.5, -1, 0.1, 0, 1, -0.1, 0.5, -1, -0.1, 0.5, -1, 0.1, 0, 1, -0.1, 0, 1, 0.1, -0.5, -1, -0.1, 0, 1, 0.1, -0.5, -1, 0.1, -0.5, -1, -0.1, -0.5, -1, 0.1, 0.5, -1, 0.1, -0.5, -1, -0.1, 0.5, -1, 0.1, 0.5, -1, -0.1, -0.5, -1, -0.1 )

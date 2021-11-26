@@ -23,9 +23,8 @@ var _start_next_level_advance :bool = false
 
 func _ready():
 	levels = []
-	for lvl in [1,2,3,4,5]:
-
-		var loaded_level = load("levels/level_%d.gd"%lvl).new()
+	for lvl in ['1','2x','2','4x','4','6x', '5', '8x']:
+		var loaded_level = load("levels/level_%s.gd"%lvl).new()
 		loaded_level.setup()
 		levels.append(loaded_level)
 	translate(Vector3(10,0,0)) #???

@@ -12,7 +12,7 @@ func setup():
 	FUNNEL_IN_TIME = 3.0
 	FUNNEL_OUT_TIME = 3.0
 
-	FUNNEL_WIDTH = 20.0
+	FUNNEL_WIDTH = 50.0
 	TUNNEL_WIDTH = 6.0
 
 	# best to keep these summing to <= 1, or impossible turns can come up

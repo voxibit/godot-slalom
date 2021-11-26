@@ -15,6 +15,8 @@ onready var final_score_label :Label = $hud/FinalScoreView/VBoxContainer/HBoxCon
 onready var high_score_label_final :Label = $hud/FinalScoreView/VBoxContainer/HBoxContainer2/HighScore
 onready var start_game_hud :Container = $hud/StartGameView
 onready var sky :ProceduralSky = $Player/Camera.get_environment().get_sky()
+onready var post_glitch :Spatial = $Player/Camera/PostGlitch
+onready var post_glitch_timer :Timer = $Player/Camera/PostGlitch/Timer
 
 const MAX_TILT:float = PI/5
 const TILT_DECAY:float = 0.95
@@ -37,6 +39,7 @@ func _ready():
 	points_collision.connect("area_entered", self, "on_points_collect")
 	obstacles.relative_speed=0
 	obstacles.set_game(self)
+	post_glitch_timer.connect("timeout", self, "_hide_post_glitch")
 	#reset()
 	
 
@@ -71,6 +74,9 @@ func on_game_over(obstacle:Area):
 	obstacles.game_over = true
 	player_particles.set_emitting(true)
 	sky_tween.stop()
+	post_glitch_timer.stop()
+	post_glitch.set_visible(true)
+	post_glitch.get_surface_material(0).set_shader_param("shake_rate",0.4)
 	score_view.set_visible(false)
 	final_score_view.set_visible(true)
 	if score > high_score:
@@ -86,7 +92,11 @@ func on_points_collect(obstacle_area:Area):
 		score += 500
 		obstacle.points_enabled = false
 		obstacle.soundfx.play(0)
+		post_glitch.set_visible(true)
+		post_glitch_timer.start(0.2)
 
+func _hide_post_glitch():
+	post_glitch.set_visible(false)
 	
 func reset():
 	score = 0
@@ -96,11 +106,16 @@ func reset():
 	score_view.set_visible(true)
 	final_score_view.set_visible(false)
 	start_game_hud.set_visible(false)
+	post_glitch.get_surface_material(0).set_shader_param("shake_rate",1.0)
+	post_glitch.set_visible(false)
+	sky_tween.stop()
 
 	sky.set_sky_top_color(obstacles.levels[0].SKY_TOP_COLOR)
 	sky.set_sky_horizon_color(obstacles.levels[0].SKY_HORIZON_COLOR)
 	sky.set_ground_horizon_color(obstacles.levels[0].GROUND_HORIZON_COLOR)
 	sky.set_ground_bottom_color(obstacles.levels[0].GROUND_BOTTOM_COLOR)
+	
+	
 
 func advance_level(old, new, fade:float):
 	print("___ADVANCE LEVEL___")

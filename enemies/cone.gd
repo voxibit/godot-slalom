@@ -4,6 +4,7 @@ onready var timer :Timer = $Timer
 var soundfx :AudioStreamPlayer3D setget ,get_soundfx
 var points_enabled :bool = true
 var xspeed :float
+var zspeed :float
 
 var sounds :Array = []
 
@@ -15,17 +16,23 @@ func rando(xmove:bool=false):
 	else:
 		xspeed = 0
 		
-func rand_color():
+func rand_color(emit:float=0):
 	var mat :SpatialMaterial = get_surface_material(0)
 	var color :Color = Color(randf(),randf(),randf(),1)
 	mat.set_albedo(color)
-	mat.set_emission(color)
+	if emit>0:
+		mat.set_feature(SpatialMaterial.FEATURE_EMISSION,true)
+		mat.set_emission(color)
+		mat.set_emission_energy(emit)
 	#get_surface_material(0).set_shader_param("color", color)
 	
 
 func rand_xspeed(vx0:float, vxrand:float):
 	xspeed = vx0 + randf()*vxrand
 	if randf() < 0.5: xspeed *= -1
+	
+func rand_zspeed(vz0:float, vzrand:float):
+	zspeed = vz0 + randf()*vzrand
 	
 func rand_scale(x0, xrand, y0, yrand):
 	var xscale :float = x0 + xrand*randf()
@@ -44,7 +51,7 @@ func _ready():
 		
 
 func _physics_process(delta):
-	translate(Vector3(xspeed/get_scale().x*delta, 0, 0))
+	translate(Vector3(xspeed/get_scale().x*delta, 0, zspeed/get_scale().z*delta))
 
 func get_soundfx():
 	#return $AudioStreamPlayer3D
