@@ -8,11 +8,13 @@ onready var player_collision :Area = $Player/Area
 onready var points_collision :Area = $Player/PointsArea
 onready var player_particles :CPUParticles = $Player/CPUParticles
 onready var hud_score :Label = $hud/ScoreView/HBoxContainer/ScoreContainer/ScoreLabel
+onready var high_score_name_label :Label = $hud/ScoreView/HBoxContainer/Label2
 onready var high_score_label :Label = $hud/ScoreView/HBoxContainer/HiScoreContainer/HiScoreLabel
 onready var score_view :Container = $hud/ScoreView
 onready var final_score_view :Container = $hud/FinalScoreView
 onready var final_score_label :Label = $hud/FinalScoreView/VBoxContainer/HBoxContainer/FinalScore
 onready var high_score_label_final :Label = $hud/FinalScoreView/VBoxContainer/HBoxContainer2/HighScore
+onready var high_score_label_final_name :Label = $hud/FinalScoreView/VBoxContainer/HBoxContainer2/Label2
 onready var start_game_hud :Container = $hud/StartGameView
 onready var sky :ProceduralSky = $Player/Camera.get_environment().get_sky()
 onready var post_glitch :Spatial = $Player/Camera/PostGlitch
@@ -29,8 +31,17 @@ var sky_tween :Resource = preload("sky_tween.gd").new()
 var tilt:float=0
 var score :float = 0
 var high_score :float = 0
+var _high_score_run :bool = false
 
 var game_over :bool = true
+
+# This is needed if:
+# The ship hits and obstacle giving +500 pts but game_over
+# The game_over causes -500 pts. IF the +500 pts had made
+# the game be a high_score_run, then the high score gets -500 pts
+# erroniously. Because the +500 should never have happened.
+# So we check for this
+var _prev_high_score :float = 0
 
 func _ready():
 	sky_tween.set_sky(sky)
@@ -47,19 +58,18 @@ func _physics_process(delta):
 	var decay :float = TILT_DECAY
 	
 	if not game_over:
-		if Input.is_action_pressed("ui_left"):
+		if Input.is_action_pressed("ui_left") and not Input.is_action_pressed("ui_right"):
 			tilt += TILT_ACCELERATION
 			decay *= decay
-		elif Input.is_action_pressed("ui_right"):
+		elif Input.is_action_pressed("ui_right") and not Input.is_action_pressed("ui_left"):
 			tilt -= TILT_ACCELERATION
 			decay *= decay
-		elif Input.is_action_just_pressed("ui_cancel"):
-			obstacles.skip()
 			
 		score += POINTS_PER_SECOND*delta
 		hud_score.set_text(str(int(score)))
 		if score > high_score:
 			high_score = score
+			_high_score_run = true
 			high_score_label.set_text(str(int(high_score)))
 		sky_tween.process(delta)
 	elif Input.is_action_pressed("ui_select"):
@@ -68,12 +78,25 @@ func _physics_process(delta):
 	tilt *= decay
 	player.set_rotation(Vector3(0,0,tilt*MAX_TILT))
 	obstacles.set_tilt(tilt)
+	if score == high_score:
+		high_score_label.add_color_override("font_color", Color("d7c141"))
+		high_score_name_label.add_color_override("font_color", Color("d7c141"))
 	
-func on_game_over(obstacle:Area):
+func on_game_over(obstacle_area:Area):
 	game_over = true
 	obstacles.game_over = true
 	player_particles.set_emitting(true)
 	sky_tween.stop()
+	var obstacle = obstacle_area.get_parent()
+	if not obstacle.points_enabled:
+		score -= 500
+		if _high_score_run:
+			high_score -= 500
+			prints(high_score, _prev_high_score)
+			if high_score < _prev_high_score:
+				high_score = _prev_high_score
+				_high_score_run = false
+	obstacle.points_enabled=false
 	post_glitch_timer.stop()
 	post_glitch.set_visible(true)
 	post_glitch.get_surface_material(0).set_shader_param("shake_rate",0.4)
@@ -82,6 +105,12 @@ func on_game_over(obstacle:Area):
 	if score > high_score:
 		high_score = score
 	final_score_label.set_text(str(int(score)))
+	if _high_score_run:
+		high_score_label_final.add_color_override("font_color", Color("d7c141"))
+		high_score_label_final_name.add_color_override("font_color", Color("d7c141"))
+	else:
+		high_score_label_final.add_color_override("font_color", Color("FFFFFF"))
+		high_score_label_final_name.add_color_override("font_color", Color("FFFFFF"))
 	high_score_label_final.set_text(str(int(high_score)))
 	high_score_label.set_text(str(int(high_score)))
 	
@@ -99,7 +128,10 @@ func _hide_post_glitch():
 	post_glitch.set_visible(false)
 	
 func reset():
+	high_score_label.add_color_override("font_color", Color("FFFFFF"))
+	high_score_name_label.add_color_override("font_color", Color("FFFFFF"))
 	score = 0
+	_high_score_run = false
 	game_over = false
 	obstacles.reset()
 	player_particles.set_emitting(false)
@@ -109,6 +141,8 @@ func reset():
 	post_glitch.get_surface_material(0).set_shader_param("shake_rate",1.0)
 	post_glitch.set_visible(false)
 	sky_tween.stop()
+	
+	_prev_high_score = high_score
 
 	sky.set_sky_top_color(obstacles.levels[0].SKY_TOP_COLOR)
 	sky.set_sky_horizon_color(obstacles.levels[0].SKY_HORIZON_COLOR)
@@ -118,7 +152,6 @@ func reset():
 	
 
 func advance_level(old, new, fade:float):
-	print("___ADVANCE LEVEL___")
 	sky_tween.tween(old.SKY_TOP_COLOR, old.SKY_HORIZON_COLOR, 
 					old.GROUND_BOTTOM_COLOR, old.GROUND_HORIZON_COLOR,
 					new.SKY_TOP_COLOR, new.SKY_HORIZON_COLOR, 

@@ -41,7 +41,6 @@ func tween(old_sky_top:Color, old_sky_horizon:Color, old_ground_bottom:Color, ol
 
 func process(delta:float):
 	if not processing: return
-	#prints("TWEEN", abs_t, t)
 	abs_t += delta
 	if abs_t > duration:
 		_color_sky()
@@ -62,11 +61,9 @@ func _color_sky():
 	sky.set_ground_horizon_color(lerp(ground_horizon[0], ground_horizon[1], abs_t/duration))
 
 func start():
-	print("START tween")
 	processing = true
 	
 func stop():
-	print("      ============ STOP tween")
 	processing = false
 	reset()
 

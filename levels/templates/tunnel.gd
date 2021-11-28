@@ -8,14 +8,15 @@ var GROUND_HORIZON_COLOR :Color = Color(0.8, 0.5, 0.4, 1.0)
 var GROUND_BOTTOM_COLOR :Color = Color(0.0, 0.0, 0.2, 1.0)
 
 var CONES_PER_SECOND :float = 20.0
+var CONE_EMISSIVITY :float = 0.0
 var LEVEL_DURATION :float = 30.0
-var LEVEL_POINTS :float = 3000.0
+var LEVEL_POINTS :float = 7000.0
 var LEVEL_FADE_OUT_TIME :float = 4.0
 
 var FUNNEL_IN_TIME :float = 3.0
 var FUNNEL_OUT_TIME :float = 3.0
 
-var FUNNEL_WIDTH :float = 50.0
+var FUNNEL_WIDTH :float = 40.0
 var TUNNEL_WIDTH :float = 4.2
 
 var TURN_SIZE_0 :float = 5
@@ -46,6 +47,7 @@ func initialize(obstacle_parent:Spatial):
 	t = 0
 	path_t = 0
 	abs_t = 0
+	_fading_out = false
 	_prev_path_x = 0
 	_next_path_x = 0
 	_path_duration = FUNNEL_IN_TIME
@@ -109,7 +111,7 @@ func _spawn_cone(obs_x:float, obs_z:float, max_spawn_x:float, max_spawn_z:float)
 		left = true
 	
 	cone.translate(Vector3(x0 + x, 0, -obs_z-z))
-	cone.rand_color()
+	cone.rand_color(CONE_EMISSIVITY)
 	#cone.set_scale(Vector3(2,1,1))
 	
 	return cone
@@ -130,7 +132,6 @@ func get_width() -> float:
 func fade_in():
 	_fading_out = false
 	abs_t = 0
-	
 	
 func fade_out():
 	_fading_out = true

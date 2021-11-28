@@ -23,8 +23,8 @@ var _start_next_level_advance :bool = false
 
 func _ready():
 	levels = []
-	for lvl in ['1','2x','2','4x','4','6x', '5', '8x']:
-		var loaded_level = load("levels/level_%s.gd"%lvl).new()
+	for lvl in range(8,9):
+		var loaded_level = load("levels/level_%d.gd"%lvl).new()
 		loaded_level.setup()
 		levels.append(loaded_level)
 	translate(Vector3(10,0,0)) #???
@@ -121,7 +121,3 @@ func reset():
 		level.is_loaded = false
 	curr_level = levels[0]
 	
-func skip():
-	t = curr_level.LEVEL_DURATION - curr_level.LEVEL_FADE_OUT_TIME
-	curr_level.abs_t = t
-

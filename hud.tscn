@@ -62,6 +62,7 @@ margin_left = 769.0
 margin_right = 952.0
 margin_bottom = 40.0
 theme = ExtResource( 1 )
+custom_colors/font_color = Color( 0.843137, 0.756863, 0.254902, 1 )
 text = "HIGH SCORE:"
 
 [node name="HiScoreContainer" type="MarginContainer" parent="ScoreView/HBoxContainer"]

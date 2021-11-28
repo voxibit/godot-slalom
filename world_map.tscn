@@ -16,6 +16,7 @@ size = Vector2( 1.28, 0.32 )
 [sub_resource type="SpatialMaterial" id=4]
 flags_transparent = true
 params_depth_draw_mode = 3
+params_billboard_mode = 1
 albedo_texture = ExtResource( 3 )
 
 [sub_resource type="ProceduralSky" id=2]
