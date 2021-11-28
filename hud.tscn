@@ -23,21 +23,21 @@ __meta__ = {
 margin_left = 20.0
 margin_top = 20.0
 margin_right = 1004.0
-margin_bottom = 60.0
+margin_bottom = 72.0
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
 [node name="Label" type="Label" parent="ScoreView/HBoxContainer"]
-margin_right = 98.0
-margin_bottom = 40.0
+margin_right = 125.0
+margin_bottom = 52.0
 theme = ExtResource( 1 )
 text = "SCORE:"
 
 [node name="ScoreContainer" type="MarginContainer" parent="ScoreView/HBoxContainer"]
-margin_left = 102.0
-margin_right = 130.0
-margin_bottom = 40.0
+margin_left = 129.0
+margin_right = 162.0
+margin_bottom = 52.0
 custom_constants/margin_right = 0
 custom_constants/margin_top = 0
 custom_constants/margin_left = 10
@@ -45,30 +45,30 @@ custom_constants/margin_bottom = 0
 
 [node name="ScoreLabel" type="Label" parent="ScoreView/HBoxContainer/ScoreContainer"]
 margin_left = 10.0
-margin_right = 28.0
-margin_bottom = 40.0
+margin_right = 33.0
+margin_bottom = 52.0
 theme = ExtResource( 1 )
 text = "0"
 
 [node name="Spacer" type="Control" parent="ScoreView/HBoxContainer"]
-margin_left = 134.0
-margin_right = 765.0
-margin_bottom = 40.0
+margin_left = 166.0
+margin_right = 710.0
+margin_bottom = 52.0
 size_flags_horizontal = 3
 size_flags_vertical = 7
 
 [node name="Label2" type="Label" parent="ScoreView/HBoxContainer"]
-margin_left = 769.0
-margin_right = 952.0
-margin_bottom = 40.0
+margin_left = 714.0
+margin_right = 947.0
+margin_bottom = 52.0
 theme = ExtResource( 1 )
 custom_colors/font_color = Color( 0.843137, 0.756863, 0.254902, 1 )
 text = "HIGH SCORE:"
 
 [node name="HiScoreContainer" type="MarginContainer" parent="ScoreView/HBoxContainer"]
-margin_left = 956.0
+margin_left = 951.0
 margin_right = 984.0
-margin_bottom = 40.0
+margin_bottom = 52.0
 custom_constants/margin_right = 0
 custom_constants/margin_top = 0
 custom_constants/margin_left = 10
@@ -76,8 +76,8 @@ custom_constants/margin_bottom = 0
 
 [node name="HiScoreLabel" type="Label" parent="ScoreView/HBoxContainer/HiScoreContainer"]
 margin_left = 10.0
-margin_right = 28.0
-margin_bottom = 40.0
+margin_right = 33.0
+margin_bottom = 52.0
 theme = ExtResource( 1 )
 text = "0"
 
@@ -90,84 +90,77 @@ __meta__ = {
 }
 
 [node name="VBoxContainer" type="VBoxContainer" parent="FinalScoreView"]
-margin_left = 297.0
-margin_top = 170.0
-margin_right = 727.0
-margin_bottom = 430.0
+margin_left = 362.0
+margin_top = 134.0
+margin_right = 661.0
+margin_bottom = 465.0
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
 [node name="Label" type="Label" parent="FinalScoreView/VBoxContainer"]
-margin_right = 430.0
-margin_bottom = 40.0
+margin_right = 299.0
+margin_bottom = 52.0
 theme = ExtResource( 1 )
 text = "GAME OVER"
 align = 1
 
 [node name="HBoxContainer" type="HBoxContainer" parent="FinalScoreView/VBoxContainer"]
-margin_top = 44.0
-margin_right = 430.0
-margin_bottom = 84.0
+margin_top = 56.0
+margin_right = 299.0
+margin_bottom = 108.0
 custom_constants/separation = 20
 
 [node name="Label2" type="Label" parent="FinalScoreView/VBoxContainer/HBoxContainer"]
-margin_right = 201.0
-margin_bottom = 40.0
+margin_right = 256.0
+margin_bottom = 52.0
 theme = ExtResource( 1 )
 text = "Final Score:"
 
 [node name="FinalScore" type="Label" parent="FinalScoreView/VBoxContainer/HBoxContainer"]
-margin_left = 221.0
-margin_right = 430.0
-margin_bottom = 40.0
+margin_left = 276.0
+margin_right = 299.0
+margin_bottom = 52.0
 size_flags_horizontal = 3
 theme = ExtResource( 1 )
 text = "0"
 align = 2
 
 [node name="HBoxContainer2" type="HBoxContainer" parent="FinalScoreView/VBoxContainer"]
-margin_top = 88.0
-margin_right = 430.0
-margin_bottom = 128.0
+margin_top = 112.0
+margin_right = 299.0
+margin_bottom = 164.0
 custom_constants/separation = 20
 
 [node name="Label2" type="Label" parent="FinalScoreView/VBoxContainer/HBoxContainer2"]
-margin_right = 183.0
-margin_bottom = 40.0
+margin_right = 233.0
+margin_bottom = 52.0
 theme = ExtResource( 1 )
 text = "High Score:"
 
 [node name="HighScore" type="Label" parent="FinalScoreView/VBoxContainer/HBoxContainer2"]
-margin_left = 203.0
-margin_right = 430.0
-margin_bottom = 40.0
+margin_left = 253.0
+margin_right = 299.0
+margin_bottom = 52.0
 size_flags_horizontal = 3
 theme = ExtResource( 1 )
 text = "0"
 align = 2
 
 [node name="Label4" type="Label" parent="FinalScoreView/VBoxContainer"]
-margin_top = 132.0
-margin_right = 430.0
-margin_bottom = 172.0
+margin_top = 168.0
+margin_right = 299.0
+margin_bottom = 220.0
 theme = ExtResource( 1 )
 align = 1
 
 [node name="Label5" type="Label" parent="FinalScoreView/VBoxContainer"]
-margin_top = 176.0
-margin_right = 430.0
-margin_bottom = 216.0
+margin_top = 224.0
+margin_right = 299.0
+margin_bottom = 331.0
 theme = ExtResource( 1 )
-text = "Press SPACE or TAP screen"
-align = 1
-
-[node name="Label6" type="Label" parent="FinalScoreView/VBoxContainer"]
-margin_top = 220.0
-margin_right = 430.0
-margin_bottom = 260.0
-theme = ExtResource( 1 )
-text = "To CONTINUE"
+text = "Press SPACE
+To CONTINUE"
 align = 1
 
 [node name="StartGameView" type="CenterContainer" parent="."]
@@ -178,50 +171,50 @@ __meta__ = {
 }
 
 [node name="VBoxContainer2" type="VBoxContainer" parent="StartGameView"]
-margin_left = 297.0
-margin_top = 149.0
-margin_right = 727.0
-margin_bottom = 451.0
+margin_left = 276.0
+margin_top = 107.0
+margin_right = 747.0
+margin_bottom = 493.0
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
 [node name="Label" type="Label" parent="StartGameView/VBoxContainer2"]
-margin_right = 430.0
-margin_bottom = 40.0
+margin_right = 471.0
+margin_bottom = 52.0
 theme = ExtResource( 1 )
 text = "LightSpeed Slalom"
 align = 1
 
 [node name="Spacer" type="Label" parent="StartGameView/VBoxContainer2"]
-margin_top = 44.0
-margin_right = 430.0
-margin_bottom = 84.0
+margin_top = 56.0
+margin_right = 471.0
+margin_bottom = 108.0
 theme = ExtResource( 1 )
 text = "---"
 align = 1
 
 [node name="Label5" type="Label" parent="StartGameView/VBoxContainer2"]
-margin_top = 88.0
-margin_right = 430.0
-margin_bottom = 171.0
+margin_top = 112.0
+margin_right = 471.0
+margin_bottom = 219.0
 theme = ExtResource( 1 )
 text = "To BEGIN
-Press SPACE or TAP screen"
+Press SPACE"
 align = 1
 
 [node name="Spacer2" type="Label" parent="StartGameView/VBoxContainer2"]
-margin_top = 175.0
-margin_right = 430.0
-margin_bottom = 215.0
+margin_top = 223.0
+margin_right = 471.0
+margin_bottom = 275.0
 theme = ExtResource( 1 )
 text = "---"
 align = 1
 
 [node name="Label4" type="Label" parent="StartGameView/VBoxContainer2"]
-margin_top = 219.0
-margin_right = 430.0
-margin_bottom = 302.0
+margin_top = 279.0
+margin_right = 471.0
+margin_bottom = 386.0
 theme = ExtResource( 1 )
 text = "Controls:
 Arrow Keys: Move <- / ->"

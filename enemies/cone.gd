@@ -1,10 +1,12 @@
 extends MeshInstance
 
 onready var timer :Timer = $Timer
+onready var points_timer :Timer = $PointsTimer
 var soundfx :AudioStreamPlayer3D setget ,get_soundfx
 var points_enabled :bool = true
 var xspeed :float
 var zspeed :float
+var caused_game_over :bool = false
 
 var sounds :Array = []
 
@@ -48,6 +50,7 @@ func _ready():
 	for child in get_children():
 		if child is AudioStreamPlayer3D:
 			sounds.append(child)
+	points_timer.connect("timeout", self, "on_points")
 		
 
 func _physics_process(delta):
@@ -56,3 +59,7 @@ func _physics_process(delta):
 func get_soundfx():
 	#return $AudioStreamPlayer3D
 	return sounds[randi() % len(sounds)]
+	
+func on_points():
+	remove_child(points_timer)
+	get_parent().get_parent().on_points_timer(self)

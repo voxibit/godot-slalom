@@ -47,7 +47,7 @@ func _ready():
 	sky_tween.set_sky(sky)
 	obstacles.connect("next_level", self, "advance_level")
 	player_collision.connect("area_entered", self, "on_game_over")
-	points_collision.connect("area_entered", self, "on_points_collect")
+	points_collision.connect("area_entered", self, "on_points_collision")
 	obstacles.relative_speed=0
 	obstacles.set_game(self)
 	post_glitch_timer.connect("timeout", self, "_hide_post_glitch")
@@ -88,15 +88,18 @@ func on_game_over(obstacle_area:Area):
 	player_particles.set_emitting(true)
 	sky_tween.stop()
 	var obstacle = obstacle_area.get_parent()
-	if not obstacle.points_enabled:
-		score -= 500
-		if _high_score_run:
-			high_score -= 500
-			prints(high_score, _prev_high_score)
-			if high_score < _prev_high_score:
-				high_score = _prev_high_score
-				_high_score_run = false
+	if false:
+		if not obstacle.points_enabled:
+			score -= 500
+			if _high_score_run:
+				high_score -= 500
+				prints(high_score, _prev_high_score)
+				if high_score < _prev_high_score:
+					high_score = _prev_high_score
+					_high_score_run = false
+	
 	obstacle.points_enabled=false
+	obstacle.caused_game_over = true
 	post_glitch_timer.stop()
 	post_glitch.set_visible(true)
 	post_glitch.get_surface_material(0).set_shader_param("shake_rate",0.4)
@@ -114,10 +117,15 @@ func on_game_over(obstacle_area:Area):
 	high_score_label_final.set_text(str(int(high_score)))
 	high_score_label.set_text(str(int(high_score)))
 	
-func on_points_collect(obstacle_area:Area):
+func on_points_collision(obstacle_area:Area):
 	if game_over: return
 	var obstacle :MeshInstance = obstacle_area.get_parent()
 	if obstacle.points_enabled:
+		obstacle.points_enabled = false
+		obstacle.points_timer.start(0.05)
+		
+func on_points_timer(obstacle):
+	if not obstacle.caused_game_over:
 		score += 500
 		obstacle.points_enabled = false
 		obstacle.soundfx.play(0)
